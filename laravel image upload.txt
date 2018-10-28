@@ -1,0 +1,8 @@
+if($request->hasFile('image_file')){
+            $background = $request->file('image_file')->store('images');
+            $background = asset('storage/').$background;
+        }elseif($request->image_url){
+            $background = $request->image_url;
+        }else{
+            $background = asset('storage/').'images/slider-bg.jpg';
+        }
