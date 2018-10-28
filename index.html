@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="bootstrap-imageupload.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="imageupload panel panel-default col card card-info">
+        <div class="panel-heading clearfix card-header">
+            <h3 class="panel-title pull-left card-title">Upload Image</h3>
+            <div class="btn-group pull-right">
+                <button type="button" class="btn btn-outline-dark waves-effect waves-light active">File</button>
+                <button type="button" class="btn btn-outline-dark waves-effect waves-light">URL</button>
+            </div>
+        </div>
+        <div class="file-tab panel-body card-body">
+            <label id="upload-btn" class="m-0 btn btn-default btn-outline-primary btn-file btn-light waves-effect waves-light">
+                <i class="fa fa-upload" id="upload-icon"></i>
+                <span>Browse</span>
+                <!-- The file is stored here. -->
+                <input type="file" name="image-file" class="d-none">
+            </label>
+            <button type="button" class="btn btn-default btn-outline-danger">Remove</button>
+        </div>
+        <div class="url-tab panel-body d-none card-body">
+            <div class="input-group">
+                <input type="text" class="form-control hasclear" placeholder="Image URL">
+                <div class="input-group-btn input-group-append">
+                    <button type="button" class="btn btn-primary"><i class="fa fa-upload"></i> Submit</button>
+                </div>
+            </div>
+            <button type="button" class="btn btn-default btn-outline-danger">Remove</button>
+            <!-- The URL is stored here. -->
+            <input type="hidden" name="image-url">
+        </div>
+    </div>
+</div>
+
+
+<script src="bootstrap-imageupload.js"></script>
+
+<script>
+    //Thumbnail Uploader
+    var imageupload = $('.imageupload');
+    imageupload.imageupload();
+</script>
+</body>
+</html>
