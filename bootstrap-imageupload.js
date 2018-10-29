@@ -45,7 +45,8 @@ if (typeof jQuery === 'undefined') {
         allowedFormats: [ 'jpg', 'jpeg', 'png', 'gif' ],
         //maxWidth: 250,
         //maxHeight: 250,
-        maxFileSizeKb: 5120
+        maxFileSizeKb: 5120,
+        preview: false,
     };
 
     // -----------------------------------------------------------------------------
@@ -57,27 +58,43 @@ if (typeof jQuery === 'undefined') {
 
         var $imageupload = this;
         var $fileTab = $imageupload.find('.file-tab');
-        var $fileTabButton = $imageupload.find('.panel-heading .btn:eq(0)');
+        var $fileTabButton = $imageupload.find('.panel-heading .btn-file');
         //var $browseFileButton = $fileTab.find('input[type="file"]');
-        var $browseFileButton = $fileTab.find('#upload-btn');
-        var $removeFileButton = $fileTab.find('.btn:eq(1)');
-        var $urlTab = $imageupload.find('.url-tab');
-        var $urlTabButton = $imageupload.find('.panel-heading .btn:eq(1)');
-        var $submitUrlButton = $urlTab.find('.btn:eq(0)');
-        var $removeUrlButton = $urlTab.find('.btn:eq(1)');
+        var $browseFileButton = $fileTab.find('.upload-btn');
+        //var $removeFileButton = $fileTab.find('.btn:eq(1)');
+        var $removeFileButton = $fileTab.find('.remove-btn');
+        //Reset Preview Image Button
+        var $resetFileButton = $('.btn-reset');
 
-        var $uploadIcon = $fileTab.find('#upload-icon')
+        var $urlTab = $imageupload.find('.url-tab');
+        var $urlTabButton = $imageupload.find('.panel-heading .btn-url');
+        var $submitUrlButton = $urlTab.find('.submit-btn');
+        var $removeUrlButton = $urlTab.find('.remove-btn');
+
+        var $uploadIcon = $fileTab.find('#upload-icon');
+
 
         // Do a complete reset.
         resetFileTab($fileTab);
         resetUrlTab($urlTab);
         showFileTab($fileTab);
         enable.call($imageupload);
-        
+
+
+        if(options.preview){
+            $fileTab.prepend(getImageThumbnailHtml(options.preview));
+            $browseFileButton.find('span').text('Change');
+        }else{
+            $resetFileButton.css('display','none');
+        }
+        if(options.preview){
+
+        }
         // Unbind all previous bound event handlers.
         $fileTabButton.off();
         $browseFileButton.off();
         $removeFileButton.off();
+        $resetFileButton.off();
         $urlTabButton.off();
         $submitUrlButton.off();
         $removeUrlButton.off();
@@ -96,7 +113,18 @@ if (typeof jQuery === 'undefined') {
             $(this).blur();
             resetFileTab($fileTab);
         });
-
+        $resetFileButton.on('click',function () {
+            $(this).blur();
+            resetFileTab($fileTab);
+            resetUrlTab($urlTab);
+            if(options.preview){
+                if($(this).closest('.file-tab').length){
+                $fileTab.prepend(getImageThumbnailHtml(options.preview));
+                }else{
+                    $urlTab.prepend(getImageThumbnailHtml(options.preview));
+                }
+            }
+        });
         $urlTabButton.on('click', function() {
             $(this).blur();
             showUrlTab($urlTab);
@@ -131,6 +159,7 @@ if (typeof jQuery === 'undefined') {
     // -----------------------------------------------------------------------------
     // Private Methods
     // -----------------------------------------------------------------------------
+
 
     function getAlertHtml(message) {
         var html = [];
@@ -215,13 +244,14 @@ if (typeof jQuery === 'undefined') {
 
     function showFileTab($fileTab) {
         var $imageupload = $fileTab.closest('.imageupload');
-        var $fileTabButton = $imageupload.find('.panel-heading .btn:eq(0)');
+        var $fileTabButton = $imageupload.find('.panel-heading .btn-file');
 
         if (!$fileTabButton.hasClass('active')) {
             var $urlTab = $imageupload.find('.url-tab');
 
+
             // Change active tab buttton.
-            $imageupload.find('.panel-heading .btn:eq(1)').removeClass('active');
+            $imageupload.find('.panel-heading .btn-url').removeClass('active');
             $fileTabButton.addClass('active');
 
             // Hide URL tab and show file tab.
@@ -229,6 +259,9 @@ if (typeof jQuery === 'undefined') {
             $urlTab.removeClass('d-block');
             $fileTab.show();
             resetUrlTab($urlTab);
+            if(options.preview){
+                $fileTab.prepend(getImageThumbnailHtml(options.preview));
+            }
         }
     }
 
@@ -236,19 +269,28 @@ if (typeof jQuery === 'undefined') {
         $fileTab.find('.alert').remove();
         $fileTab.find('div.card-text').remove();
         $fileTab.find('#upload-icon').removeClass('fa-edit');
-        $fileTab.find('.btn span').text('Browse');
-        $fileTab.find('.btn:eq(1)').hide();
+        if(options.preview){
+            $fileTab.find('.btn span').text('Change');
+        }else{
+            $fileTab.find('.btn span').text('Browse');
+            $('#image_old').val('');
+        }
+        $fileTab.find('.remove-btn').hide();
         $fileTab.find('input').val('');
     }
 
     function submitImageFile($fileTab) {
         var $browseFileButton = $fileTab.find('#upload-btn');
-        var $removeFileButton = $fileTab.find('.btn:eq(1)');
+        var $removeFileButton = $fileTab.find('.remove-btn');
         var $fileInput = $browseFileButton.find('input');
         
         $fileTab.find('.alert').remove();
         $fileTab.find('div.card-text').remove();
-        $browseFileButton.find('span').text('Browse');
+        if(options.preview){
+            $browseFileButton.find('span').text('Change');
+        }else{
+            $browseFileButton.find('span').text('Browse');
+        }
         $removeFileButton.hide();
 
         // Check if file was uploaded.
@@ -291,13 +333,13 @@ if (typeof jQuery === 'undefined') {
 
     function showUrlTab($urlTab) {
         var $imageupload = $urlTab.closest('.imageupload');
-        var $urlTabButton = $imageupload.find('.panel-heading .btn:eq(1)');
+        var $urlTabButton = $imageupload.find('.panel-heading .btn-url');
 
         if (!$urlTabButton.hasClass('active')) {
             var $fileTab = $imageupload.find('.file-tab');
 
             // Change active tab button.
-            $imageupload.find('.panel-heading .btn:eq(0)').removeClass('active');
+            $imageupload.find('.panel-heading .btn-file').removeClass('active');
             $urlTabButton.addClass('active');
 
             // Hide file tab and show URL tab.
@@ -305,20 +347,28 @@ if (typeof jQuery === 'undefined') {
             $urlTab.addClass('d-block');
             $urlTab.show();
             resetFileTab($fileTab);
+            if(options.preview){
+                $urlTab.prepend(getImageThumbnailHtml(options.preview));
+            }
         }
     }
 
     function resetUrlTab($urlTab) {
         $urlTab.find('.alert').remove();
-        $urlTab.find('img').remove();
-        $urlTab.find('.btn:eq(1)').hide();
-        $urlTab.find('input').val('');
+        $urlTab.find('div.card-text').remove();
+        $urlTab.find('#upload-icon').removeClass('fa-edit');
+        $urlTab.find('.remove-btn').hide();
+        if(options.preview) {
+            $urlTab.find('#input-url').val(options.preview);
+        }else{
+            $urlTab.find('#input-url').val('');
+        }
     }
 
     function submitImageUrl($urlTab) {
         var $urlInput = $urlTab.find('input[type="text"]');
-        var $submitUrlButton = $urlTab.find('.btn:eq(0)');
-        var $removeUrlButton = $urlTab.find('.btn:eq(1)');
+        var $submitUrlButton = $urlTab.find('.submit-btn');
+        var $removeUrlButton = $urlTab.find('.remove-btn');
 
         $urlTab.find('.alert').remove();
         $urlTab.find('img').remove();

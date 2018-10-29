@@ -21,30 +21,48 @@
         <div class="panel-heading clearfix card-header">
             <h3 class="panel-title pull-left card-title">Upload Image</h3>
             <div class="btn-group pull-right">
-                <button type="button" class="btn btn-outline-dark waves-effect waves-light active">File</button>
-                <button type="button" class="btn btn-outline-dark waves-effect waves-light">URL</button>
+                <button type="button" class="btn btn-outline-dark waves-effect waves-light active btn-file">File</button>
+                <button type="button" class="btn btn-outline-dark waves-effect waves-light btn-url">URL</button>
             </div>
         </div>
+
+        <!--File TAB-->
         <div class="file-tab panel-body card-body">
-            <label id="upload-btn" class="m-0 btn btn-default btn-outline-primary btn-file btn-light waves-effect waves-light">
+            <!--Old Image Preview (Update)-->
+            <div class="card-text">
+                <img src="https://via.placeholder.com/350x150" alt="" class="form-control-square pt-3  h-100 w-100 img-responsive img-thumbnail">
+            </div>
+
+            <label id="upload-btn" class="m-0 btn btn-outline-primary btn-file btn-light waves-effect waves-light upload-btn">
                 <i class="fa fa-upload" id="upload-icon"></i>
                 <span>Browse</span>
                 <!-- The file is stored here. -->
-                <input type="file" name="image-file" class="d-none">
+                <input type="file" name="image_file" class="d-none">
             </label>
-            <button type="button" class="btn btn-default btn-outline-danger">Remove</button>
+            <button type="button" class="btn btn-default btn-outline-danger remove-btn" id="remove-btn">Remove</button>
+
+            <!--Reset The preview-->
+            <button type="button" class="btn btn-default btn-outline-info btn-reset">Reset</button>
         </div>
+
+        <!--URL TAB-->
         <div class="url-tab panel-body d-none card-body">
             <div class="input-group">
-                <input type="text" class="form-control hasclear" placeholder="Image URL">
+                <input type="text" class="form-control" id="input-url" placeholder="Image URL">
                 <div class="input-group-btn input-group-append">
-                    <button type="button" class="btn btn-primary"><i class="fa fa-upload"></i> Submit</button>
+                    <button type="button" class="btn btn-primary submit-btn"><i class="fa fa-upload"></i> Submit</button>
+                    <button type="button" class="btn btn-default btn-outline-info btn-reset">Reset</button>
                 </div>
             </div>
-            <button type="button" class="btn btn-default btn-outline-danger">Remove</button>
+
+            <button type="button" class="btn btn-default btn-outline-danger remove-btn">Remove</button>
+
             <!-- The URL is stored here. -->
-            <input type="hidden" name="image-url">
+            <input type="hidden" name="image_url">
         </div>
+
+        <!--Old Image Url (On Update @if have any)-->
+        <input type="hidden" value="https://via.placeholder.com/350x150" name="image_old" id="image_old">
     </div>
 </div>
 
@@ -54,7 +72,9 @@
 <script>
     //Thumbnail Uploader
     var imageupload = $('.imageupload');
-    imageupload.imageupload();
+    imageupload.imageupload({
+        preview: 'https://via.placeholder.com/350x150',
+    });
 </script>
 </body>
 </html>

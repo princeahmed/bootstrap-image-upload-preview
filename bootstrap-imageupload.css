@@ -35,9 +35,7 @@
   text-align: right;
   top: 0;
 }
-.imageupload .file-tab button {
-  display: none;
-}
+
 .imageupload .file-tab .thumbnail {
   margin-bottom: 10px;
 }

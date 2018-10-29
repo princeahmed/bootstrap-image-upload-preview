@@ -1,8 +1,14 @@
-if($request->hasFile('image_file')){
+	if($request->hasFile('image_file')){
             $background = $request->file('image_file')->store('images');
-            $background = asset('storage/').$background;
+            $background = url('storage').'/'.$background;
         }elseif($request->image_url){
             $background = $request->image_url;
+        }elseif($request->image_old){
+            $background = $request->image_old;
         }else{
-            $background = asset('storage/').'images/slider-bg.jpg';
+            //Default Image
+            $background = asset('storage/').'/'.'images/slider-bg.jpg';
+
+            //No Image
+            //$background = '';
         }
